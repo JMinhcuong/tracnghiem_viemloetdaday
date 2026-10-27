@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🌸 Trắc nghiệm: Loét dạ dày - tá tràng 🌸</title>
+<script>
+  window.MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']] } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root{
+    --bg1:#fff0f5;
+    --bg2:#ffe3ee;
+    --sakura:#ffb6c9;
+    --sakura-dark:#ff8fab;
+    --pink-text:#8a4a5e;
+    --pink-soft:#fdf2f6;
+    --card:#fffafc;
+    --correct:#b7e8c6;
+    --correct-text:#1e6b3b;
+    --wrong:#ffc9c9;
+    --wrong-text:#9b1c1c;
+    --shadow: 0 8px 24px rgba(255,140,170,0.18);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(160deg,var(--bg1),var(--bg2) 60%, #ffeef3);
+    color:var(--pink-text);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+  .petal{
+    position:absolute; top:-5%;
+    font-size:20px;
+    animation: fall linear infinite;
+    opacity:0.6;
+  }
+  @keyframes fall{
+    0%{ transform: translateY(-10vh) rotate(0deg); }
+    100%{ transform: translateY(110vh) rotate(360deg); }
+  }
+  header{
+    text-align:center;
+    padding:34px 16px 18px;
+    position:relative; z-index:1;
+  }
+  header h1{
+    margin:0 0 6px;
+    font-size: 1.9rem;
+    color:var(--sakura-dark);
+    text-shadow: 1px 1px 0 #fff;
+  }
+  header p{margin:4px 0; color:#a6697d;}
+  .container{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 16px;
+    position:relative; z-index:1;
+  }
+  .panel{
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-bottom: 22px;
+    border: 1px solid #ffdce7;
+  }
+  .stats-bar{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:18px;
+  }
+  .stat-chip{
+    background: var(--pink-soft);
+    border: 1px solid #ffd3e2;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    color: var(--pink-text);
+    font-weight:600;
+  }
+  .progress-wrap{
+    background:#ffe0ec;
+    border-radius: 999px;
+    height: 14px;
+    overflow:hidden;
+    margin: 6px 0 18px;
+    border: 1px solid #ffc9dc;
+  }
+  .progress-bar{
+    height:100%;
+    background: linear-gradient(90deg,#ffb6c9,#ff8fab);
+    width:0%;
+    transition: width .3s ease;
+  }
+  .controls{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom: 10px;
+  }
+  button{
+    font-family: inherit;
+    cursor:pointer;
+    border:none;
+    border-radius: 14px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight:600;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  button:active{ transform: scale(0.97); }
+  .btn-main{
+    background: linear-gradient(135deg,#ff9fb8,#ff7aa2);
+    color:#fff;
+    box-shadow: 0 4px 12px rgba(255,120,150,0.4);
+  }
+  .btn-main:hover{ box-shadow: 0 6px 16px rgba(255,120,150,0.55); }
+  .btn-outline{
+    background: #fff;
+    color: var(--sakura-dark);
+    border: 2px solid var(--sakura);
+  }
+  .btn-outline.active{
+    background: var(--sakura);
+    color:#fff;
+  }
+  .question-card{
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+    background: #fffdfd;
+    border: 1px solid #ffe0ec;
+    box-shadow: 0 4px 14px rgba(255,170,190,0.12);
+  }
+  .q-meta{
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px;
+  }
+  .badge{
+    font-size: 0.72rem;
+    font-weight:700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing:.3px;
+  }
+  .badge-important{ background:#ffd6e3; color:#c23b63; }
+  .badge-easy{ background:#d8f3dc; color:#2d6a4f; }
+  .badge-medium{ background:#ffe8c2; color:#9a6a00; }
+  .badge-hard{ background:#ffc9c9; color:#9b1c1c; }
+  .badge-num{ background:#f3e8ff; color:#6b4ea3; }
+  .q-text{
+    font-size: 1.05rem;
+    font-weight:600;
+    margin: 6px 0 14px;
+    color:#5e3346;
+    line-height:1.5;
+  }
+  .options{ display:grid; gap:10px; }
+  .option{
+    display:flex; align-items:center; gap:10px;
+    text-align:left;
+    background:#fff6f9;
+    border:2px solid #ffdfea;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.97rem;
+    color:#6b4255;
+    width:100%;
+  }
+  .option:hover:not(.locked){
+    border-color: var(--sakura-dark);
+    background:#fff0f5;
+  }
+  .option .letter{
+    flex:0 0 auto;
+    width: 26px; height:26px;
+    border-radius:50%;
+    background:#ffd6e3;
+    color:#c23b63;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:0.85rem;
+  }
+  .option.correct{
+    background: var(--correct) !important;
+    border-color: #6bbf8c !important;
+    color: var(--correct-text) !important;
+  }
+  .option.correct .letter{ background:#6bbf8c; color:#fff; }
+  .option.wrong{
+    background: var(--wrong) !important;
+    border-color: #e06666 !important;
+    color: var(--wrong-text) !important;
+  }
+  .option.wrong .letter{ background:#e06666; color:#fff; }
+  .option.locked{ cursor:default; }
+  .option.dim{ opacity:0.55; }
+
+  .explain-box{
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff5f8;
+    border-left: 5px solid var(--sakura-dark);
+    display:none;
+    animation: slideIn .25s ease;
+  }
+  @keyframes slideIn{
+    from{ opacity:0; transform: translateY(-6px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .explain-box.show{ display:block; }
+  .explain-title{
+    font-weight:700;
+    color: var(--sakura-dark);
+    margin-bottom:6px;
+    font-size:0.95rem;
+  }
+  .explain-text{ font-size:0.93rem; line-height:1.55; color:#5e3346; margin-bottom:8px;}
+  .tip-box{
+    background:#fff9e8;
+    border: 1px dashed #f0c766;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size:0.88rem;
+    color:#8a6a1a;
+  }
+  .result-box{
+    text-align:center;
+    padding: 26px 18px;
+  }
+  .result-box h2{
+    color: var(--sakura-dark);
+    font-size: 1.6rem;
+  }
+  .result-score{
+    font-size: 2.6rem;
+    font-weight:800;
+    color:#ff6f91;
+    margin: 10px 0;
+  }
+  .result-sub{ color:#a6697d; margin-bottom: 18px; }
+  footer{
+    text-align:center;
+    color:#c58ba1;
+    font-size: 0.82rem;
+    padding: 20px;
+    position:relative; z-index:1;
+  }
+  .sticky-footer{
+    position: sticky; bottom:0;
+    background: linear-gradient(0deg, var(--bg2) 60%, transparent);
+    padding-top: 10px;
+    display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+  }
+  @media (max-width:600px){
+    header h1{font-size:1.4rem;}
+    .q-text{font-size:0.98rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="petals" id="petals"></div>
+
+<header>
+  <h1>🌸 Trắc Nghiệm: Loét Dạ Dày – Tá Tràng 🌸</h1>
+  <p>50 câu hỏi tương tác · Giải thích chi tiết · Mẹo làm bài nhanh</p>
+</header>
+
+<div class="container">
+
+  <div class="panel" id="introPanel">
+    <div class="stats-bar">
+      <span class="stat-chip">📘 20 câu lý thuyết trọng tâm</span>
+      <span class="stat-chip">🟢 15 câu dễ</span>
+      <span class="stat-chip">🟡 10 câu trung bình</span>
+      <span class="stat-chip">🔴 5 câu khó</span>
+    </div>
+    <div class="controls">
+      <button class="btn-main" onclick="startQuiz('all')">🚀 Làm tất cả 50 câu</button>
+      <button class="btn-outline" onclick="startQuiz('important')">📘 Chỉ trọng tâm (20)</button>
+      <button class="btn-outline" onclick="startQuiz('easy')">🟢 Chỉ câu dễ (15)</button>
+      <button class="btn-outline" onclick="startQuiz('medium')">🟡 Chỉ trung bình (10)</button>
+      <button class="btn-outline" onclick="startQuiz('hard')">🔴 Chỉ câu khó (5)</button>
+    </div>
+  </div>
+
+  <div class="panel" id="quizPanel" style="display:none;">
+    <div class="stats-bar">
+      <span class="stat-chip" id="scoreChip">✅ Đúng: 0</span>
+      <span class="stat-chip" id="progressChip">Câu 0/0</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="questionList"></div>
+    <div class="sticky-footer">
+      <button class="btn-outline" onclick="backToIntro()">⬅️ Về trang chính</button>
+      <button class="btn-main" onclick="showResult()">🏁 Nộp bài / Xem kết quả</button>
+    </div>
+  </div>
+
+  <div class="panel" id="resultPanel" style="display:none;">
+    <div class="result-box">
+      <h2>🌸 Kết quả của bạn 🌸</h2>
+      <div class="result-score" id="resultScore">0/0</div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="controls">
+        <button class="btn-main" onclick="backToIntro()">🔄 Làm lại từ đầu</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Nội dung biên soạn bám sát slide bài giảng "Loét dạ dày – tá tràng" · Chỉ phục vụ mục đích ôn tập 🌸</footer>
+
+<script>
+/* ========== TẠO HIỆU ỨNG HOA ANH ĐÀO RƠI ========== */
+const petalsContainer = document.getElementById('petals');
+const petalEmojis = ['🌸','🌸','🌸','💮','🌸'];
+for(let i=0;i<22;i++){
+  const p = document.createElement('div');
+  p.className='petal';
+  p.textContent = petalEmojis[Math.floor(Math.random()*petalEmojis.length)];
+  p.style.left = Math.random()*100+'vw';
+  p.style.fontSize = (12+Math.random()*16)+'px';
+  p.style.animationDuration = (8+Math.random()*10)+'s';
+  p.style.animationDelay = (Math.random()*10)+'s';
+  petalsContainer.appendChild(p);
+}
+
+/* ========== DỮ LIỆU CÂU HỎI ========== */
+// cat: important | easy | medium | hard
+const QUESTIONS = [
+// ======= 20 CÂU LÝ THUYẾT TRỌNG TÂM =======
+{cat:'important', q:'Theo định nghĩa, loét dạ dày – tá tràng là tổn thương mất chất vượt qua lớp nào của thành dạ dày/tá tràng?',
+ opts:['Lớp niêm mạc bề mặt','Lớp cơ niêm (đến các lớp sâu hơn)','Lớp dưới niêm mạc','Lớp thanh mạc'], ans:1,
+ explain:'Theo định nghĩa trong bài: loét là tổn thương mất chất vượt qua lớp cơ niêm đến các lớp sâu hơn của thành dạ dày hoặc tá tràng.',
+ tip:'Mẹo: nhớ "Loét = vượt cơ niêm", còn "Trợt = nông hơn, chưa qua cơ niêm".'},
+{cat:'important', q:'Điểm khác biệt chính giữa loét (ulcer) và trợt (erosion) là gì?',
+ opts:['Vị trí tổn thương khác nhau','Độ sâu của tổn thương mất chất','Nguyên nhân gây bệnh','Triệu chứng lâm sàng'], ans:1,
+ explain:'Trợt cũng là tổn thương mất chất nhưng nông hơn loét, không vượt qua lớp cơ niêm như loét thực sự.',
+ tip:'Mẹo: ghi nhớ cặp từ khóa "mất chất nông – trợt" và "mất chất sâu – loét".'},
+{cat:'important', q:'Khoảng bao nhiêu phần trăm các trường hợp loét dạ dày – tá tràng là do H. pylori và NSAIDs gây ra?',
+ opts:['50%','70%','90%','100%'], ans:2,
+ explain:'Bài giảng nêu rõ: gần 90% trường hợp loét DDTT là do H. pylori và NSAIDs gây ra, đây là hai nguyên nhân hàng đầu cần tầm soát.',
+ tip:'Mẹo thi: con số "90%" gắn liền với cặp "H.pylori + NSAIDs" – đây là câu hỏi rất hay gặp.'},
+{cat:'important', q:'Cơ chế bệnh sinh cốt lõi của loét dạ dày – tá tràng được mô tả trong bài là gì?',
+ opts:['Tăng tiết acid đơn thuần không rõ nguyên nhân','Mất cân bằng giữa yếu tố tấn công và yếu tố bảo vệ','Chỉ do nhiễm khuẩn tại chỗ','Rối loạn miễn dịch toàn thân'], ans:1,
+ explain:'Sơ đồ cán cân trong bài minh họa rõ: loét hình thành khi có sự mất cân bằng giữa yếu tố tấn công (acid, pepsin, Hp, NSAIDs...) và yếu tố bảo vệ (chất nhầy, bicarbonate, tưới máu...).',
+ tip:'Mẹo: hình dung "cái cân" – bên nặng hơn (tấn công) thắng thì sinh loét.'},
+{cat:'important', q:'Phương pháp nào được xem là chẩn đoán chính xác nhất và phổ biến nhất hiện nay cho loét DDTT?',
+ opts:['X-quang dạ dày – tá tràng cản quang','Siêu âm bụng','Nội soi tiêu hóa trên','Xét nghiệm công thức máu'], ans:2,
+ explain:'Nội soi tiêu hóa trên được nêu là phương pháp chẩn đoán chính xác nhất, phổ biến nhất, với độ nhạy khoảng 90%, cho phép quan sát trực tiếp và sinh thiết ổ loét.',
+ tip:'Mẹo: "nội soi = vàng" (tiêu chuẩn vàng) trong hầu hết bệnh lý tiêu hóa trên.'},
+{cat:'important', q:'Độ nhạy của nội soi tiêu hóa trên trong chẩn đoán loét DDTT khoảng bao nhiêu?',
+ opts:['50%','70%','90%','99%'], ans:2,
+ explain:'Bài nêu nội soi có độ nhạy khoảng 90%, là con số cần nhớ khi so sánh với các phương pháp cận lâm sàng khác.',
+ tip:'Mẹo: liên hệ với tỷ lệ 90% của nguyên nhân H.pylori/NSAIDs để dễ nhớ theo nhóm số "90%".'},
+{cat:'important', q:'Dấu hiệu nội soi nào gợi ý ổ loét có tính chất ÁC TÍNH, cần sinh thiết?',
+ opts:['Bờ đều, đáy phẳng','Bờ loét dày, nhô cao, không đều; nếp niêm mạc hội tụ bị cắt cụt','Ổ loét nhỏ, nông','Đáy ổ loét sạch, không xuất tiết'], ans:1,
+ explain:'Bài phân biệt: bờ đều – đáy phẳng gợi ý lành tính; còn bờ dày, nhô cao, không đều, nếp niêm mạc hội tụ bị cắt cụt là dấu hiệu gợi ý ác tính, bắt buộc phải sinh thiết.',
+ tip:'Mẹo: "đều – phẳng = lành", "dày – nhô cao – cụt = dữ (ác tính)".'},
+{cat:'important', q:'Trên X-quang cản quang, dấu hiệu nào được xem là ĐẶC TRƯNG của ổ loét?',
+ opts:['Ổ đọng thuốc (niche)','Nếp niêm mạc hội tụ về ổ loét','Biến dạng hành tá tràng','Hẹp môn vị'], ans:1,
+ explain:'Theo bảng dấu hiệu X-quang trong bài, "nếp niêm mạc hội tụ về ổ loét" được ghi chú là dấu hiệu đặc trưng, trong khi ổ đọng thuốc là hình ảnh trực tiếp của ổ loét.',
+ tip:'Mẹo: nhớ cụm "hội tụ = đặc trưng" khi gặp câu hỏi về X-quang loét.'},
+{cat:'important', q:'Thuốc ức chế bơm proton (PPI) tác động trực tiếp lên đích nào ở tế bào viền?',
+ opts:['Thụ thể H2','Thụ thể Gastrin','Bơm H+/K+-ATPase','Thụ thể M1'], ans:2,
+ explain:'PPI ức chế bơm H+/K+-ATPase ở màng tế bào viền, làm ngừng tiết H+ vào lòng dạ dày, từ đó giảm tiết acid mạnh và bền vững.',
+ tip:'Mẹo: PPI = "Proton Pump Inhibitor" – tên thuốc đã nói rõ đích tác dụng là bơm proton.'},
+{cat:'important', q:'Vì sao PPI cần được uống trước bữa ăn 30–60 phút?',
+ opts:['Để tránh tương tác thức ăn gây dị ứng','Để thuốc được hấp thu và ức chế bơm proton đúng lúc bơm hoạt động mạnh nhất (sau ăn)','Để giảm tác dụng phụ tiêu chảy','Không có lý do đặc biệt, chỉ là thói quen'], ans:1,
+ explain:'PPI chỉ ức chế được các bơm proton đang hoạt động; uống trước ăn 30–60 phút giúp thuốc đạt nồng độ đỉnh đúng lúc bơm proton hoạt động mạnh nhất để tiêu hóa thức ăn.',
+ tip:'Mẹo nhớ nhanh: "uống trước – bơm hoạt động – thuốc mới chặn được".'},
+{cat:'important', q:'PPI cần khoảng bao lâu để đạt hiệu quả ức chế tiết acid tối đa?',
+ opts:['Ngay sau liều đầu tiên','3–5 ngày','10–14 ngày','1 tháng'], ans:1,
+ explain:'Bài nêu rõ PPI có khởi phát tác dụng chậm, cần 3–5 ngày sử dụng liên tục để đạt mức ức chế tiết acid tối đa.',
+ tip:'Mẹo: so sánh với P-CAB — P-CAB khởi phát nhanh hơn hẳn PPI, đây là điểm hay bị hỏi so sánh.'},
+{cat:'important', q:'So với PPI, ưu điểm nổi bật của thuốc P-CAB (vonoprazan) là gì?',
+ opts:['Rẻ tiền hơn nhiều','Khởi phát tác dụng nhanh, ổn định 24h, ít phụ thuộc kiểu chuyển hóa CYP2C19','Không có tác dụng phụ nào','Chỉ dùng được dạng tiêm'], ans:1,
+ explain:'P-CAB ức chế cạnh tranh thuận nghịch với ion K+ tại bơm H+/K+-ATPase, cho tác dụng nhanh và ổn định hơn PPI, ít chịu ảnh hưởng của đa hình gen CYP2C19 giữa các cá thể, và không cần uống trước ăn.',
+ tip:'Mẹo: P-CAB = "nhanh, ổn định, linh hoạt giờ uống" — 3 từ khóa ưu điểm cần nhớ.'},
+{cat:'important', q:'Thuốc kháng Histamin H2 ức chế cạnh tranh với chất trung gian nào tại thụ thể H2?',
+ opts:['Acetylcholin','Gastrin','Histamin','Prostaglandin'], ans:2,
+ explain:'Thuốc kháng H2 (như ranitidine, famotidine) ức chế cạnh tranh thuận nghịch với histamin tại thụ thể H2 của tế bào viền, làm giảm hoạt động bơm proton và giảm tiết acid, nhưng hiệu quả kém hơn PPI.',
+ tip:'Mẹo: "kháng H2 chặn Histamin tại cửa H2" – tên thuốc trùng tên thụ thể, rất dễ nhớ.'},
+{cat:'important', q:'Tế bào viền của niêm mạc dạ dày có 3 loại thụ thể chính kích thích tiết acid, đó là:',
+ opts:['M1, H2 và thụ thể Gastrin','Alpha, Beta và Gamma','D1, D2 và D3','Thụ thể NMDA, AMPA và Kainate'], ans:0,
+ explain:'Theo sơ đồ cơ chế trong bài, tế bào viền có 3 loại thụ thể kích thích tiết acid: thụ thể M1 (hoạt hóa bởi acetylcholin), thụ thể H2 (hoạt hóa bởi histamin) và thụ thể Gastrin (hoạt hóa bởi gastrin).',
+ tip:'Mẹo nhớ: "M-H-G" – Muscarinic, Histamin, Gastrin, cả 3 đều dẫn tới kích hoạt bơm proton.'},
+{cat:'important', q:'Thụ thể M1 trên tế bào viền bị hoạt hóa bởi chất trung gian nào?',
+ opts:['Gastrin','Histamin','Acetylcholin','Serotonin'], ans:2,
+ explain:'Theo sơ đồ, thụ thể M1 (muscarinic) bị hoạt hóa bởi acetylcholin – chất dẫn truyền thần kinh phó giao cảm, góp phần kích thích bơm proton tăng tiết acid.',
+ tip:'Mẹo: "M" trong M1 gợi nhớ "Muscarinic – Acetylcholin" (giống hệ thần kinh phó giao cảm).'},
+{cat:'important', q:'Cơ chế tác dụng của Sucralfate trong điều trị loét là gì?',
+ opts:['Ức chế bơm proton trực tiếp','Trung hòa acid dạ dày','Tạo lớp đệm bám dính bảo vệ bề mặt ổ loét trong môi trường acid','Diệt trực tiếp H. pylori'], ans:2,
+ explain:'Trong môi trường acid, Sucralfate tích điện âm gắn với bề mặt ổ loét (tích điện dương) tạo một lớp đệm bảo vệ, đồng thời hấp phụ và bất hoạt pepsin, muối mật.',
+ tip:'Mẹo: Sucralfate hoạt động như "băng dán vết thương" cho ổ loét, không phải thuốc giảm tiết acid.'},
+{cat:'important', q:'Vì sao không nên dùng Bismuth dạng thuốc nước hoặc nhai?',
+ opts:['Vì làm giảm hiệu quả điều trị','Vì gây đen răng và lợi','Vì gây dị ứng nặng','Vì làm tăng tiết acid'], ans:1,
+ explain:'Bismuth dạng nước hoặc nhai có thể tiếp xúc trực tiếp và làm đen răng, lợi, do đó bài khuyến cáo tránh các dạng bào chế này.',
+ tip:'Mẹo ghi nhớ: "Bismuth – nhai/uống nước – đen răng" là chi tiết hay bị hỏi lắt léo trong đề thi.'},
+{cat:'important', q:'Misoprostol là chất tương tự của hoạt chất nội sinh nào?',
+ opts:['Prostaglandin E1','Histamin','Acetylcholin','Bicarbonate'], ans:0,
+ explain:'Misoprostol là chất tương tự Prostaglandin E1, có tác dụng ức chế tiết acid, kích thích tiết nhầy, tăng bicarbonate và tăng tưới máu niêm mạc dạ dày.',
+ tip:'Mẹo: PGE1 tự nhiên vốn có vai trò "bảo vệ niêm mạc" – NSAIDs ức chế PGE1 nên gây loét, dùng Misoprostol là để "bù lại" chất này.'},
+{cat:'important', q:'Misoprostol chống chỉ định tuyệt đối ở đối tượng nào do tác dụng phụ co tử cung?',
+ opts:['Người cao tuổi','Phụ nữ có thai','Trẻ em dưới 5 tuổi','Người có bệnh gan'], ans:1,
+ explain:'Do Misoprostol gây co tử cung, thuốc chống chỉ định ở phụ nữ mang thai, ngoài ra còn có tác dụng phụ thường gặp là tiêu chảy.',
+ tip:'Mẹo: liên tưởng Misoprostol còn được dùng trong sản khoa để gây co tử cung – nên tuyệt đối không dùng cho thai phụ muốn giữ thai.'},
+{cat:'important', q:'Trước khi làm xét nghiệm tìm H. pylori, cần ngưng thuốc ức chế bơm proton (PPI) tối thiểu bao lâu?',
+ opts:['1 tuần','2 tuần','4 tuần','6 tuần'], ans:1,
+ explain:'Bài lưu ý: cần ngưng tất cả kháng sinh và bismuth ít nhất 4 tuần, và ngưng PPI ít nhất 2 tuần trước khi tiến hành xét nghiệm tìm H. pylori để tránh âm tính giả.',
+ tip:'Mẹo nhớ theo cặp số: "Kháng sinh/Bismuth = 4 tuần", "PPI = 2 tuần" (PPI ngưng ngắn hơn).'},
+
+// ======= 15 CÂU DỄ =======
+{cat:'easy', q:'Loét dạ dày – tá tràng là bệnh lý tổn thương xảy ra ở cơ quan nào?',
+ opts:['Gan và mật','Dạ dày và tá tràng','Đại tràng và trực tràng','Thực quản và hầu họng'], ans:1,
+ explain:'Đúng như tên gọi, loét dạ dày – tá tràng là tổn thương xảy ra ở thành dạ dày và/hoặc tá tràng (đoạn đầu ruột non).',
+ tip:'Mẹo: tên bệnh luôn phản ánh đúng vị trí tổn thương, đọc kỹ tên bệnh trước khi chọn đáp án.'},
+{cat:'easy', q:'Loại vi khuẩn nào được xem là nguyên nhân nhiễm trùng hàng đầu gây loét DDTT?',
+ opts:['E. coli','Helicobacter pylori (H. pylori)','Salmonella typhi','Vibrio cholerae'], ans:1,
+ explain:'H. pylori là tác nhân nhiễm trùng chính, gắn liền với gần 90% các trường hợp loét DDTT cùng với NSAIDs.',
+ tip:'Mẹo: H. pylori luôn là "từ khóa vàng" xuất hiện xuyên suốt bài học về loét DDTT.'},
+{cat:'easy', q:'Nhóm thuốc nào sau đây là nguyên nhân phổ biến gây loét DDTT do thuốc?',
+ opts:['Thuốc kháng histamin dị ứng','NSAIDs (thuốc kháng viêm không steroid)','Vitamin tổng hợp','Thuốc nhuận tràng'], ans:1,
+ explain:'NSAIDs (và aspirin, corticoid) được liệt kê là nhóm thuốc gây loét DDTT phổ biến, do ức chế tổng hợp prostaglandin bảo vệ niêm mạc.',
+ tip:'Mẹo: nhớ cặp "NSAIDs – aspirin – corticoid" là nhóm thuốc gây loét cần khai thác khi hỏi bệnh sử.'},
+{cat:'easy', q:'Triệu chứng cơ năng thường gặp NHẤT của loét DDTT là gì?',
+ opts:['Đau thượng vị','Đau hạ vị','Đau vùng thắt lưng','Đau đầu dữ dội'], ans:0,
+ explain:'Đau vùng thượng vị là triệu chứng thường gặp nhất, đôi khi khu trú vùng hạ sườn trái hoặc phải.',
+ tip:'Mẹo: "thượng vị" = vùng bụng trên rốn, ngay dưới mũi ức – vị trí giải phẫu của dạ dày.'},
+{cat:'easy', q:'Đau trong loét DDTT thường có đặc điểm liên quan đến yếu tố nào?',
+ opts:['Vận động thể lực','Bữa ăn','Thời tiết lạnh','Tư thế nằm ngửa'], ans:1,
+ explain:'Bài nêu rõ cơn đau trong loét DDTT thường liên quan đến bữa ăn (có thể đau khi đói hoặc sau ăn tùy vị trí loét).',
+ tip:'Mẹo: đây là đặc điểm lâm sàng kinh điển giúp phân biệt với các nguyên nhân đau bụng khác.'},
+{cat:'easy', q:'Khoảng bao nhiêu phần trăm bệnh nhân loét DDTT KHÔNG có triệu chứng (loét câm)?',
+ opts:['30%','50%','70%','90%'], ans:2,
+ explain:'Khoảng 70% trường hợp là loét câm (không triệu chứng), thường gặp ở người lớn tuổi có sử dụng NSAIDs.',
+ tip:'Mẹo: nhớ con số 70% loét câm đi kèm đối tượng "người già + NSAIDs".'},
+{cat:'easy', q:'Loét câm (không triệu chứng) thường gặp nhất ở đối tượng nào?',
+ opts:['Trẻ em','Người lớn tuổi có sử dụng NSAIDs','Phụ nữ mang thai','Vận động viên thể thao'], ans:1,
+ explain:'Người lớn tuổi dùng NSAIDs kéo dài thường bị loét câm, không có triệu chứng đau điển hình cho đến khi có biến chứng.',
+ tip:'Mẹo: đây là lý do vì sao cần thận trọng dùng NSAIDs dài hạn ở người cao tuổi, kể cả khi họ không than đau bụng.'},
+{cat:'easy', q:'Biến chứng nào của loét DDTT biểu hiện bằng nôn ra máu, tiêu phân đen, da niêm nhợt?',
+ opts:['Hẹp môn vị','Xuất huyết tiêu hóa','Thủng ổ loét','Viêm phúc mạc tiên phát'], ans:1,
+ explain:'Xuất huyết tiêu hóa biểu hiện bằng nôn ra máu, tiêu ra máu hoặc tiêu phân đen, da niêm nhợt, có thể kèm rối loạn huyết động.',
+ tip:'Mẹo: "phân đen" là dấu hiệu kinh điển của xuất huyết tiêu hóa trên.'},
+{cat:'easy', q:'Biến chứng nào biểu hiện bằng đau bụng đột ngột, dữ dội, lan tỏa, có cảm ứng phúc mạc (+)?',
+ opts:['Xuất huyết tiêu hóa','Hẹp môn vị','Thủng ổ loét','Trào ngược dạ dày thực quản'], ans:2,
+ explain:'Thủng ổ loét gây đau bụng đột ngột, dữ dội, lan tỏa toàn bụng, kèm dấu cảm ứng phúc mạc dương tính – đây là cấp cứu ngoại khoa.',
+ tip:'Mẹo: "đau đột ngột như dao đâm + cảm ứng phúc mạc" = nghĩ ngay đến thủng tạng rỗng.'},
+{cat:'easy', q:'Dấu hiệu "óc ách" dương tính thường gặp trong biến chứng nào của loét DDTT?',
+ opts:['Xuất huyết tiêu hóa','Hẹp môn vị','Thủng ổ loét','Viêm tụy cấp'], ans:1,
+ explain:'Hẹp môn vị có biểu hiện mau no, chướng bụng, ăn không tiêu, sụt cân và dấu óc ách dương tính do ứ đọng dịch, thức ăn trong dạ dày.',
+ tip:'Mẹo: dấu "óc ách" (khi lắc bụng nghe tiếng nước) đặc trưng cho tình trạng ứ đọng do hẹp môn vị.'},
+{cat:'easy', q:'Phương pháp chẩn đoán hình ảnh cổ điển, sử dụng cản quang để phát hiện ổ loét là gì?',
+ opts:['Nội soi tiêu hóa trên','X-quang dạ dày – tá tràng có cản quang','CT scan bụng','MRI bụng'], ans:1,
+ explain:'X-quang dạ dày – tá tràng có cản quang là phương pháp cổ điển, phát hiện ổ loét và biến dạng hang vị – hành tá tràng, hiện ít dùng hơn nội soi.',
+ tip:'Mẹo: X-quang cản quang được cân nhắc khi bệnh nhân có bệnh hô hấp/tim mạch nặng, không an toàn để nội soi.'},
+{cat:'easy', q:'Xét nghiệm tìm H. pylori nào không xâm lấn, độ nhạy và độ đặc hiệu cao, thực hiện được cho trẻ em?',
+ opts:['Test urease nhanh trên mô sinh thiết','Xét nghiệm urea qua hơi thở (test hơi thở C13, C14)','Sinh thiết mô qua nội soi','Chụp X-quang cản quang'], ans:1,
+ explain:'Test hơi thở C13/C14 không xâm lấn, có độ nhạy và độ đặc hiệu cao, thực hiện được cho trẻ em, tuy nhiên chi phí cao hơn các phương pháp khác.',
+ tip:'Mẹo: "test hơi thở" nghe tên đã biết ngay là phương pháp không xâm lấn (không cần nội soi).'},
+{cat:'easy', q:'Nhược điểm chính của xét nghiệm tìm kháng thể H. pylori trong máu là gì?',
+ opts:['Chi phí quá cao','Tỷ lệ dương tính giả cao, độ chính xác không cao','Chỉ thực hiện được ở bệnh viện lớn','Gây đau đớn cho bệnh nhân'], ans:1,
+ explain:'Xét nghiệm kháng thể Hp trong máu tuy đơn giản, dễ thực hiện nhưng có tỷ lệ dương tính giả cao và độ chính xác không cao (vì kháng thể có thể tồn tại cả khi đã hết nhiễm).',
+ tip:'Mẹo: xét nghiệm máu tìm kháng thể chỉ nói lên đã từng/đang nhiễm, không phân biệt được nhiễm hiện tại hay cũ.'},
+{cat:'easy', q:'Nhược điểm chính của xét nghiệm tìm kháng nguyên H. pylori trong phân là gì?',
+ opts:['Giá thành quá cao','Khó lấy bệnh phẩm','Không áp dụng được cho người lớn','Độ đặc hiệu rất thấp'], ans:1,
+ explain:'Xét nghiệm kháng nguyên Hp trong phân có ưu điểm giá thành rẻ nhưng nhược điểm là khó lấy bệnh phẩm.',
+ tip:'Mẹo: so sánh nhanh — "kháng thể máu: dương giả cao"; "kháng nguyên phân: khó lấy mẫu".'},
+{cat:'easy', q:'Nên dùng thuốc trung hòa acid (antacid) vào thời điểm nào để đạt hiệu quả giảm đau tốt?',
+ opts:['Ngay trước bữa ăn','Sau bữa ăn 1–3 giờ và trước khi ngủ, hoặc khi có triệu chứng đau','Chỉ dùng buổi sáng sớm khi đói','Dùng cùng lúc với tất cả các thuốc khác'], ans:1,
+ explain:'Antacid nên dùng sau bữa ăn 1–3 giờ và trước khi ngủ, hoặc khi có triệu chứng đau/nóng rát, để trung hòa acid đúng thời điểm acid tăng tiết.',
+ tip:'Mẹo: tránh dùng antacid cùng lúc với thuốc khác, phải cách xa ít nhất 2 giờ.'},
+
+// ======= 10 CÂU TRUNG BÌNH =======
+{cat:'medium', q:'Trong điều trị loét DDTT, vì sao cần ngưng NSAIDs nếu có thể?',
+ opts:['Vì NSAIDs làm giảm hấp thu thuốc điều trị loét','Vì NSAIDs là một yếu tố tấn công chính gây loét, tiếp tục dùng sẽ cản trở lành vết loét','Vì NSAIDs gây dị ứng chéo với PPI','Vì NSAIDs làm tăng nguy cơ nhiễm H. pylori'], ans:1,
+ explain:'NSAIDs là một trong những yếu tố tấn công hàng đầu (ức chế prostaglandin bảo vệ niêm mạc), do đó điều chỉnh/ngưng NSAIDs là bước quan trọng trong điều chỉnh yếu tố tấn công khi điều trị loét.',
+ tip:'Mẹo: luôn nhớ nguyên tắc điều trị gồm 2 trụ cột — loại bỏ yếu tố tấn công (Hp, NSAIDs) và dùng thuốc giảm tiết/bảo vệ niêm mạc.'},
+{cat:'medium', q:'Vì sao PPI được xem là "thuốc nền tảng" trong điều trị loét DDTT?',
+ opts:['Vì giá thành rẻ nhất trong các nhóm thuốc','Vì tác động vào bước chung cuối cùng (bơm proton) của quá trình tiết acid, bất kể do thụ thể nào kích hoạt','Vì không có chống chỉ định nào','Vì chỉ cần dùng một liều duy nhất là khỏi bệnh'], ans:1,
+ explain:'Dù acid được kích thích tiết qua thụ thể M1, H2 hay Gastrin, tất cả đều hội tụ về hoạt hóa bơm H+/K+-ATPase; do đó ức chế trực tiếp bơm này (PPI) mang lại hiệu quả giảm tiết acid mạnh và toàn diện nhất.',
+ tip:'Mẹo: liên hệ sơ đồ 3 thụ thể (M1-H2-Gastrin) đều hội tụ về 1 "con đường chung" là bơm proton — đánh vào con đường chung luôn hiệu quả hơn đánh từng thụ thể riêng lẻ.'},
+{cat:'medium', q:'Nguyên nhân khiến test urease nhanh có thể cho kết quả âm tính giả là gì?',
+ opts:['Bệnh nhân vừa ăn no trước khi nội soi','Vị trí lấy mẫu mô sinh thiết không đúng vùng có vi khuẩn Hp','Nhiệt độ phòng xét nghiệm quá thấp','Bệnh nhân có nhóm máu O'], ans:1,
+ explain:'Test urease nhanh có thể âm tính giả nếu vị trí lấy mẫu mô sinh thiết không đúng (ví dụ không trúng vùng có H. pylori cư trú), mặc dù độ chính xác nói chung trên 90%.',
+ tip:'Mẹo: đây là lý do vì sao đôi khi cần sinh thiết nhiều vị trí khi nghi ngờ loét liên quan Hp mà test ban đầu âm tính.'},
+{cat:'medium', q:'Tại sao cần ngưng kháng sinh/bismuth và PPI trước khi làm xét nghiệm tìm H. pylori?',
+ opts:['Để tránh dị ứng thuốc trong lúc xét nghiệm','Vì các thuốc này có thể ức chế tạm thời vi khuẩn Hp, gây kết quả âm tính giả','Để tránh tương tác với thuốc gây mê khi nội soi','Không có lý do y khoa đặc biệt, chỉ là quy định hành chính'], ans:1,
+ explain:'Kháng sinh, bismuth và PPI đều có khả năng ức chế hoặc làm giảm tạm thời mật độ H. pylori trong dạ dày, khiến các xét nghiệm (test urease, hơi thở, kháng nguyên phân...) có thể cho kết quả âm tính giả nếu không ngưng thuốc đủ thời gian trước đó.',
+ tip:'Mẹo: nhớ quy tắc "4 tuần với kháng sinh/bismuth – 2 tuần với PPI" trước khi xét nghiệm tìm Hp.'},
+{cat:'medium', q:'"Vành loét" (ulcer collar) quan sát được trên X-quang cản quang thể hiện điều gì?',
+ opts:['Một khối u bao quanh ổ loét','Dải sáng (vùng giảm đậm độ) do phù nề quanh ổ loét','Mảnh xương lẫn trong dạ dày','Hiện tượng co thắt cơ vòng môn vị'], ans:1,
+ explain:'"Vành loét" là dải sáng (vùng giảm đậm độ cản quang) do mô phù nề bao quanh ổ loét, được thể hiện rõ qua hình ảnh minh họa trong bài.',
+ tip:'Mẹo: liên tưởng "vành" giống như quầng sáng bao quanh ổ loét — là mô viêm/phù nề, không phải khối u.'},
+{cat:'medium', q:'Vì sao P-CAB (vonoprazan) ít bị ảnh hưởng bởi đa hình gen CYP2C19 hơn so với PPI?',
+ opts:['Vì P-CAB không được chuyển hóa qua gan nói chung','Vì cơ chế ức chế cạnh tranh ion K+ của P-CAB khác với cơ chế hoạt hóa phụ thuộc chuyển hóa của PPI, nên ít phụ thuộc vào enzym CYP2C19 để phát huy tác dụng','Vì liều dùng của P-CAB cực kỳ thấp nên không đủ để enzym chuyển hóa','Vì P-CAB chỉ dùng đường tiêm, bỏ qua chuyển hóa gan'], ans:1,
+ explain:'PPI là tiền chất cần được hoạt hóa trong môi trường acid và chịu ảnh hưởng của chuyển hóa qua CYP2C19 (tạo khác biệt hiệu quả giữa các cá thể); P-CAB có cơ chế ức chế cạnh tranh thuận nghịch với ion K+ tại bơm proton, không phụ thuộc nhiều vào con đường chuyển hóa này nên hiệu quả ổn định hơn giữa các bệnh nhân.',
+ tip:'Mẹo: nhớ cụm "P-CAB ổn định vì ít phụ thuộc gen chuyển hóa" khi so sánh ưu điểm với PPI.'},
+{cat:'medium', q:'Cơ chế bảo vệ niêm mạc của Bismuth phát huy tốt nhất trong điều kiện pH dạ dày nào?',
+ opts:['pH > 7 (kiềm)','pH < 5 (acid)','pH trung tính 6.5–7.5','Không phụ thuộc pH'], ans:1,
+ explain:'Ở pH dạ dày < 5, Bismuth kết tủa thành vi tinh thể chelate bền vững, tạo màng bảo vệ che phủ vết loét và gắn với glycoprotein màng nhầy, ngăn cản ion H+ xâm nhập.',
+ tip:'Mẹo: môi trường acid (pH thấp) là điều kiện cần để Bismuth phát huy tác dụng tạo màng bảo vệ, khác với cơ chế của PPI/P-CAB là làm giảm acid.'},
+{cat:'medium', q:'Thuốc trung hòa acid (antacid) có thể làm giảm hấp thu của nhóm thuốc nào, cần uống cách xa ít nhất 2 giờ?',
+ opts:['Statin hạ mỡ máu','Tetracyclin, fluoroquinolon, sắt','Thuốc lợi tiểu','Insulin tiêm dưới da'], ans:1,
+ explain:'Antacid làm giảm hấp thu nhiều thuốc như tetracyclin, fluoroquinolon, các chế phẩm sắt..., do đó cần uống cách xa các thuốc này ít nhất 2 giờ.',
+ tip:'Mẹo: đây là tương tác thuốc kinh điển hay gặp trong lâm sàng — luôn hỏi bệnh nhân có đang dùng kháng sinh nhóm quinolon/tetracyclin khi kê antacid.'},
+{cat:'medium', q:'Khi nội soi phát hiện ổ loét có bờ dày, nhô cao, không đều, bước xử trí quan trọng tiếp theo là gì?',
+ opts:['Kê đơn antacid và hẹn tái khám sau 6 tháng','Tiến hành sinh thiết để loại trừ ác tính','Chỉ cần theo dõi, không cần can thiệp gì thêm','Chuyển sang điều trị bằng kháng sinh phổ rộng ngay'], ans:1,
+ explain:'Dấu hiệu bờ loét dày, nhô cao, không đều gợi ý ác tính, do đó bắt buộc phải sinh thiết để chẩn đoán xác định hoặc loại trừ ung thư dạ dày.',
+ tip:'Mẹo: bất kỳ ổ loét nào có dấu hiệu nghi ngờ ác tính trên nội soi đều cần sinh thiết, không được bỏ qua bước này.'},
+{cat:'medium', q:'Trong phác đồ điều trị tổng quát loét DDTT, ưu tiên hàng đầu khi bệnh nhân có nhiễm H. pylori là gì?',
+ opts:['Chỉ dùng antacid kéo dài đến khi hết triệu chứng','Tiệt trừ H. pylori song song với điều trị giảm tiết acid/bảo vệ niêm mạc','Phẫu thuật cắt dạ dày ngay lập tức','Không cần điều trị gì nếu bệnh nhân không đau'], ans:1,
+ explain:'Bài nêu nguyên tắc điều trị: tiệt trừ H. pylori (nếu có) là bước đầu tiên và quan trọng, kết hợp điều chỉnh yếu tố tấn công và sử dụng các nhóm thuốc điều trị loét DDTT.',
+ tip:'Mẹo: luôn khai thác và điều trị Hp trước/song song, vì không diệt Hp thì loét rất dễ tái phát dù đã dùng PPI.'},
+
+// ======= 5 CÂU KHÓ =======
+{cat:'hard', q:'Giải thích đầy đủ nguyên lý hóa sinh của test urease nhanh trong chẩn đoán H. pylori?',
+ opts:['H. pylori tiết acid trực tiếp làm chỉ thị pH đổi màu','H. pylori tiết men urease thủy phân urea thành NH3 và CO2; NH3 làm tăng pH môi trường (kiềm hơn), khiến chất chỉ thị màu trong kit chuyển từ vàng sang hồng/đỏ','H. pylori phá hủy trực tiếp niêm mạc làm lộ máu, máu phản ứng với chỉ thị đổi màu','H. pylori làm giảm nồng độ CO2 trong mẫu mô, kích hoạt chỉ thị màu'], ans:1,
+ explain:'Nguyên lý: Hp tiết men urease, thủy phân urea có trong kit thử thành NH3 và CO2. NH3 sinh ra làm tăng pH của môi trường xung quanh (kiềm hơn), khiến chất chỉ thị pH trong kit chuyển màu từ vàng sang hồng hoặc đỏ, báo hiệu có Hp.',
+ tip:'Mẹo nhớ chuỗi phản ứng: Urea → (urease của Hp) → NH3 + CO2 → NH3 tăng pH → chỉ thị đổi màu.'},
+{cat:'hard', q:'Vì sao PPI được mô tả là gắn "không thuận nghịch" vào bơm proton, trong khi P-CAB gắn "thuận nghịch"?',
+ opts:['PPI là tiền chất, cần được hoạt hóa trong môi trường acid cao của tiểu quản tiết để tạo liên kết cộng hóa trị bền vững (bất hoạt vĩnh viễn) với bơm; còn P-CAB cạnh tranh trực tiếp với ion K+ tại vị trí ngoại bào của bơm theo cơ chế có thể hồi phục','Vì PPI có trọng lượng phân tử lớn hơn nên không thể tách khỏi bơm','Vì PPI đắt tiền hơn nên nhà sản xuất thiết kế gắn chặt hơn','Thực chất không có sự khác biệt về bản chất cơ chế giữa hai nhóm thuốc'], ans:0,
+ explain:'PPI là tiền chất, trong môi trường acid rất thấp (pH) của tiểu quản tiết tế bào viền sẽ được hoạt hóa thành dạng sulfenamide hoạt động, gắn cộng hóa trị (liên kết bền, không thuận nghịch) vào nhóm cysteine của bơm H+/K+-ATPase, làm bất hoạt bơm cho đến khi cơ thể tổng hợp bơm mới. Ngược lại, P-CAB cạnh tranh thuận nghịch với ion K+ ngay tại vị trí ngoại bào của bơm mà không cần hoạt hóa qua môi trường acid, nên tác dụng xuất hiện nhanh và có thể hồi phục.',
+ tip:'Mẹo: liên hệ bảng so sánh trong bài — cột "Cơ chế" ghi rõ PPI "gắn không thuận nghịch → bất hoạt bơm", P-CAB "ức chế thuận nghịch, khởi phát nhanh".'},
+{cat:'hard', q:'Giải thích cơ chế vì sao loét DDTT ở người lớn tuổi dùng NSAIDs dài hạn thường là "loét câm" (không triệu chứng)?',
+ opts:['Vì NSAIDs có tác dụng giảm đau/kháng viêm toàn thân, có thể che lấp triệu chứng đau do loét gây ra, kết hợp với sự giảm nhạy cảm cảm giác đau liên quan tuổi tác','Vì ở người già, dạ dày không còn khả năng sinh loét nên không đau','Vì NSAIDs làm tăng cường chức năng thần kinh cảm giác nên không còn thấy đau','Loét câm chỉ là hiện tượng ngẫu nhiên, không có cơ chế giải thích'], ans:0,
+ explain:'NSAIDs vốn có tác dụng giảm đau và kháng viêm toàn thân, có thể che lấp/làm giảm cảm nhận đau do tổn thương loét gây ra ngay tại chỗ; đồng thời người lớn tuổi có xu hướng giảm nhạy cảm với kích thích đau nội tạng. Do đó bệnh nhân thường không có triệu chứng điển hình cho đến khi xuất hiện biến chứng (xuất huyết, thủng).',
+ tip:'Mẹo lâm sàng: luôn tầm soát loét DDTT ở người già dùng NSAIDs dài hạn dù không có triệu chứng đau bụng, vì nguy cơ phát hiện muộn ở giai đoạn biến chứng rất cao.'},
+{cat:'hard', q:'Theo sơ đồ cơ chế tiết acid của tế bào viền, bơm proton (H+/K+-ATPase) hoạt động theo nguyên tắc trao đổi ion nào?',
+ opts:['Bơm Na+ ra ngoài, đồng thời đưa Cl- vào trong tế bào','Bơm H+ vào lòng dạ dày, đồng thời tái hấp thu K+ vào trong tế bào viền (trao đổi H+/K+ qua màng đỉnh)','Bơm Ca2+ ra ngoài tế bào để hoạt hóa enzym tiêu hóa','Bơm trực tiếp HCO3- vào lòng dạ dày để tạo môi trường kiềm'], ans:1,
+ explain:'Bơm H+/K+-ATPase ở màng đỉnh tế bào viền hoạt động theo cơ chế antiport: bơm ion H+ từ trong tế bào ra lòng dạ dày (gastric lumen) để tạo acid, đồng thời vận chuyển ngược chiều ion K+ từ lòng dạ dày vào trong tế bào. Đây chính là đích tác động của cả PPI và P-CAB.',
+ tip:'Mẹo: tên gọi "H+/K+-ATPase" đã thể hiện rõ bản chất trao đổi hai chiều H+ ra – K+ vào, dùng năng lượng ATP.'},
+{cat:'hard', q:'Vì sao CT scan bụng và siêu âm bụng KHÔNG được xem là phương tiện chẩn đoán chính của loét DDTT mà chỉ đóng vai trò hỗ trợ?',
+ opts:['Vì hai phương pháp này không thể quan sát trực tiếp niêm mạc và các ổ loét nông/nhỏ, chỉ hữu ích để chẩn đoán phân biệt với bệnh lý khác hoặc phát hiện biến chứng khi nghi ngờ','Vì chi phí của hai phương pháp này quá cao so với lợi ích mang lại','Vì hai phương pháp này gây hại phóng xạ nghiêm trọng cho bệnh nhân','Vì hai phương pháp này không được triển khai tại Việt Nam'], ans:0,
+ explain:'CT scan và siêu âm bụng chủ yếu khảo sát cấu trúc các tạng và thành ống tiêu hóa từ bên ngoài hoặc qua lát cắt ngang, không thể quan sát trực tiếp bề mặt niêm mạc như nội soi, nên khó phát hiện các ổ loét nông hoặc kích thước nhỏ. Do đó, theo bài, CT scan được dùng để chẩn đoán phân biệt hoặc khi nghi ngờ loét có biến chứng, còn siêu âm ít có vai trò trong chẩn đoán loét, chủ yếu để chẩn đoán phân biệt.',
+ tip:'Mẹo: luôn xếp thứ tự ưu tiên "Nội soi > X-quang cản quang > CT/Siêu âm (hỗ trợ)" khi được hỏi về giá trị chẩn đoán loét DDTT.'}
+];
+
+/* ========== STATE ========== */
+let activeQuestions = [];
+let answeredCount = 0;
+let correctCount = 0;
+
+function catLabel(c){
+  return {important:'📘 Trọng tâm', easy:'🟢 Dễ', medium:'🟡 Trung bình', hard:'🔴 Khó'}[c];
+}
+function catBadgeClass(c){
+  return {important:'badge-important', easy:'badge-easy', medium:'badge-medium', hard:'badge-hard'}[c];
+}
+
+function startQuiz(mode){
+  if(mode === 'all'){
+    activeQuestions = QUESTIONS.slice();
+  } else {
+    activeQuestions = QUESTIONS.filter(q => q.cat === mode);
+  }
+  answeredCount = 0;
+  correctCount = 0;
+  document.getElementById('introPanel').style.display = 'none';
+  document.getElementById('resultPanel').style.display = 'none';
+  document.getElementById('quizPanel').style.display = 'block';
+  renderQuestions();
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function backToIntro(){
+  document.getElementById('introPanel').style.display = 'block';
+  document.getElementById('resultPanel').style.display = 'none';
+  document.getElementById('quizPanel').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderQuestions(){
+  const list = document.getElementById('questionList');
+  list.innerHTML = '';
+  activeQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'qcard-'+idx;
+
+    const meta = document.createElement('div');
+    meta.className = 'q-meta';
+    meta.innerHTML = `<span class="badge badge-num">Câu ${idx+1}</span>
+                       <span class="badge ${catBadgeClass(q.cat)}">${catLabel(q.cat)}</span>`;
+    card.appendChild(meta);
+
+    const qText = document.createElement('div');
+    qText.className = 'q-text';
+    qText.innerHTML = q.q;
+    card.appendChild(qText);
+
+    const opts = document.createElement('div');
+    opts.className = 'options';
+    const letters = ['A','B','C','D'];
+    q.opts.forEach((optText, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      btn.onclick = () => selectAnswer(idx, oi, btn);
+      opts.appendChild(btn);
+    });
+    card.appendChild(opts);
+
+    const explainBox = document.createElement('div');
+    explainBox.className = 'explain-box';
+    explainBox.id = 'explain-'+idx;
+    card.appendChild(explainBox);
+
+    list.appendChild(card);
+  });
+  if(window.MathJax){ MathJax.typesetPromise && MathJax.typesetPromise(); }
+}
+
+function selectAnswer(qIdx, optIdx, btnEl){
+  const q = activeQuestions[qIdx];
+  const card = document.getElementById('qcard-'+qIdx);
+  const optionButtons = card.querySelectorAll('.option');
+
+  // nếu đã trả lời rồi thì không cho chọn lại
+  if(card.dataset.answered === '1') return;
+  card.dataset.answered = '1';
+
+  optionButtons.forEach((b, i) => {
+    b.classList.add('locked');
+    if(i === q.ans){
+      b.classList.add('correct');
+    }
+    if(i === optIdx && optIdx !== q.ans){
+      b.classList.add('wrong');
+    }
+    if(i !== q.ans && i !== optIdx){
+      b.classList.add('dim');
+    }
+  });
+
+  const isCorrect = (optIdx === q.ans);
+  answeredCount++;
+  if(isCorrect) correctCount++;
+
+  const explainBox = document.getElementById('explain-'+qIdx);
+  explainBox.innerHTML = `
+    <div class="explain-title">${isCorrect ? '🎉 Chính xác! Đáp án đúng là: ' : '❌ Chưa đúng. Đáp án đúng là: '}${['A','B','C','D'][q.ans]}. ${q.opts[q.ans]}</div>
+    <div class="explain-text">📖 <b>Giải thích:</b> ${q.explain}</div>
+    <div class="tip-box">💡 <b>Mẹo làm nhanh:</b> ${q.tip}</div>
+  `;
+  explainBox.classList.add('show');
+
+  updateProgress();
+}
+
+function updateProgress(){
+  document.getElementById('scoreChip').textContent = `✅ Đúng: ${correctCount}/${answeredCount}`;
+  document.getElementById('progressChip').textContent = `Câu đã làm: ${answeredCount}/${activeQuestions.length}`;
+  const pct = activeQuestions.length ? (answeredCount/activeQuestions.length*100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showResult(){
+  document.getElementById('quizPanel').style.display = 'none';
+  document.getElementById('resultPanel').style.display = 'block';
+  const total = activeQuestions.length;
+  document.getElementById('resultScore').textContent = `${correctCount}/${total}`;
+  let msg = '';
+  const pct = total ? (correctCount/total*100) : 0;
+  if(answeredCount < total){
+    msg = `Bạn mới trả lời ${answeredCount}/${total} câu. Hãy hoàn thành hết để biết kết quả chính xác nhé! 🌸`;
+  } else if(pct >= 90){
+    msg = 'Xuất sắc! Bạn đã nắm rất vững kiến thức về loét dạ dày – tá tràng 🌸🎉';
+  } else if(pct >= 70){
+    msg = 'Khá tốt! Ôn lại một vài phần chưa chắc để đạt điểm cao hơn nhé 🌸';
+  } else if(pct >= 50){
+    msg = 'Bạn cần ôn tập thêm phần cơ chế bệnh sinh và các nhóm thuốc điều trị 🌸';
+  } else {
+    msg = 'Hãy đọc lại kỹ nội dung bài giảng và thử lại nhé, cố lên! 🌸💪';
+  }
+  document.getElementById('resultSub').textContent = msg;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
