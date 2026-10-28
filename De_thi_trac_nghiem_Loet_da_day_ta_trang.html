@@ -5,9 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>🌸 Trắc nghiệm: Loét dạ dày - tá tràng 🌸</title>
 <script>
-  window.MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']] } };
+  window.MathJax = { 
+    tex: { 
+      inlineMath: [['$','$'],['\\(','\\)']],
+      displayMath: [['$$','$$'],['\\[','\\]']]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" async></script>
 <style>
   :root{
     --bg1:#fff0f5;
@@ -93,7 +101,7 @@
     height:100%;
     background: linear-gradient(90deg,#ffb6c9,#ff8fab);
     width:0%;
-    transition: width .3s ease;
+    transition: width .4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .controls{
     display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom: 10px;
@@ -106,7 +114,7 @@
     padding: 10px 18px;
     font-size: 0.95rem;
     font-weight:600;
-    transition: transform .15s ease, box-shadow .15s ease;
+    transition: transform .15s ease, box-shadow .15s ease, background .2s;
   }
   button:active{ transform: scale(0.97); }
   .btn-main{
@@ -120,10 +128,7 @@
     color: var(--sakura-dark);
     border: 2px solid var(--sakura);
   }
-  .btn-outline.active{
-    background: var(--sakura);
-    color:#fff;
-  }
+  .btn-outline:hover{ background: var(--pink-soft); }
   .question-card{
     border-radius: 18px;
     padding: 20px;
@@ -131,6 +136,7 @@
     background: #fffdfd;
     border: 1px solid #ffe0ec;
     box-shadow: 0 4px 14px rgba(255,170,190,0.12);
+    transition: transform 0.2s ease;
   }
   .q-meta{
     display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px;
@@ -152,11 +158,11 @@
     font-weight:600;
     margin: 6px 0 14px;
     color:#5e3346;
-    line-height:1.5;
+    line-height:1.6;
   }
   .options{ display:grid; gap:10px; }
   .option{
-    display:flex; align-items:center; gap:10px;
+    display:flex; align-items:flex-start; gap:12px;
     text-align:left;
     background:#fff6f9;
     border:2px solid #ffdfea;
@@ -165,19 +171,22 @@
     font-size: 0.97rem;
     color:#6b4255;
     width:100%;
+    transition: all 0.2s ease;
   }
   .option:hover:not(.locked){
     border-color: var(--sakura-dark);
     background:#fff0f5;
+    transform: translateX(4px);
   }
   .option .letter{
     flex:0 0 auto;
-    width: 26px; height:26px;
+    width: 28px; height:28px;
     border-radius:50%;
     background:#ffd6e3;
     color:#c23b63;
     display:flex; align-items:center; justify-content:center;
     font-weight:700; font-size:0.85rem;
+    margin-top: 1px;
   }
   .option.correct{
     background: var(--correct) !important;
@@ -191,37 +200,41 @@
     color: var(--wrong-text) !important;
   }
   .option.wrong .letter{ background:#e06666; color:#fff; }
-  .option.locked{ cursor:default; }
-  .option.dim{ opacity:0.55; }
+  .option.locked{ cursor:default; pointer-events: none; }
+  .option.dim{ opacity:0.5; filter: grayscale(0.3); }
 
   .explain-box{
-    margin-top: 14px;
-    padding: 14px 16px;
+    margin-top: 16px;
+    padding: 16px 18px;
     border-radius: 14px;
     background: #fff5f8;
     border-left: 5px solid var(--sakura-dark);
     display:none;
-    animation: slideIn .25s ease;
+    animation: slideIn .3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   @keyframes slideIn{
-    from{ opacity:0; transform: translateY(-6px); }
+    from{ opacity:0; transform: translateY(-8px); }
     to{ opacity:1; transform: translateY(0); }
   }
   .explain-box.show{ display:block; }
   .explain-title{
     font-weight:700;
     color: var(--sakura-dark);
-    margin-bottom:6px;
+    margin-bottom:8px;
     font-size:0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .explain-text{ font-size:0.93rem; line-height:1.55; color:#5e3346; margin-bottom:8px;}
+  .explain-text{ font-size:0.93rem; line-height:1.6; color:#5e3346; margin-bottom:10px;}
   .tip-box{
     background:#fff9e8;
     border: 1px dashed #f0c766;
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size:0.88rem;
     color:#8a6a1a;
+    line-height: 1.5;
   }
   .result-box{
     text-align:center;
@@ -237,7 +250,7 @@
     color:#ff6f91;
     margin: 10px 0;
   }
-  .result-sub{ color:#a6697d; margin-bottom: 18px; }
+  .result-sub{ color:#a6697d; margin-bottom: 18px; line-height: 1.5; }
   footer{
     text-align:center;
     color:#c58ba1;
@@ -247,13 +260,15 @@
   }
   .sticky-footer{
     position: sticky; bottom:0;
-    background: linear-gradient(0deg, var(--bg2) 60%, transparent);
-    padding-top: 10px;
+    background: linear-gradient(0deg, var(--bg2) 70%, transparent);
+    padding: 16px 0;
     display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+    z-index: 10;
   }
   @media (max-width:600px){
     header h1{font-size:1.4rem;}
     .q-text{font-size:0.98rem;}
+    .option{ font-size: 0.9rem; padding: 10px 12px; }
   }
 </style>
 </head>
@@ -327,8 +342,7 @@ for(let i=0;i<22;i++){
   petalsContainer.appendChild(p);
 }
 
-/* ========== DỮ LIỆU CÂU HỎI ========== */
-// cat: important | easy | medium | hard
+/* ========== DỮ LIỆU CÂU HỎI (GIỮ NGUYÊN 100% NỘI DUNG GỐC) ========== */
 const QUESTIONS = [
 // ======= 20 CÂU LÝ THUYẾT TRỌNG TÂM =======
 {cat:'important', q:'Theo định nghĩa, loét dạ dày – tá tràng là tổn thương mất chất vượt qua lớp nào của thành dạ dày/tá tràng?',
@@ -539,7 +553,48 @@ const QUESTIONS = [
  tip:'Mẹo: luôn xếp thứ tự ưu tiên "Nội soi > X-quang cản quang > CT/Siêu âm (hỗ trợ)" khi được hỏi về giá trị chẩn đoán loét DDTT.'}
 ];
 
-/* ========== STATE ========== */
+/* ========== LOGIC XỬ LÝ & TỐI ƯU ========== */
+
+// Hàm trộn ngẫu nhiên đáp án (Fisher-Yates) và cập nhật lại chỉ số đáp án đúng
+function prepareQuestions(questions) {
+  return questions.map(q => {
+    // Gắn cờ đánh dấu đáp án đúng trước khi trộn
+    let optsWithCorrect = q.opts.map((opt, index) => ({
+      text: opt,
+      isCorrect: index === q.ans
+    }));
+
+    // Thuật toán xáo trộn Fisher-Yates
+    for (let i = optsWithCorrect.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optsWithCorrect[i], optsWithCorrect[j]] = [optsWithCorrect[j], optsWithCorrect[i]];
+    }
+
+    // Tìm lại vị trí mới của đáp án đúng sau khi xáo trộn
+    const newAns = optsWithCorrect.findIndex(o => o.isCorrect);
+
+    return {
+      ...q,
+      opts: optsWithCorrect.map(o => o.text),
+      ans: newAns
+    };
+  });
+}
+
+// Hàm định dạng toán học/khoa học đẹp mắt bằng MathJax (chỉ tác động lên UI, không sửa dữ liệu gốc)
+function formatMath(text) {
+  let formatted = text
+    .replace(/H\+\/K\+-ATPase/gi, '$H^+/K^+$-ATPase')
+    .replace(/H\. pylori/gi, '\\textit{H. pylori}')
+    .replace(/\bCO2\b/gi, '$CO_2$')
+    .replace(/\bNH3\b/gi, '$NH_3$')
+    .replace(/\bC13\b/gi, '$^{13}\\text{C}$')
+    .replace(/\bC14\b/gi, '$^{14}\\text{C}$')
+    .replace(/pH\s*[<>]\s*\d+/gi, match => `$${match.replace(/\s+/g, ' ')}$`)
+    .replace(/H2/gi, '$H_2$');
+  return formatted;
+}
+
 let activeQuestions = [];
 let answeredCount = 0;
 let correctCount = 0;
@@ -552,16 +607,17 @@ function catBadgeClass(c){
 }
 
 function startQuiz(mode){
-  if(mode === 'all'){
-    activeQuestions = QUESTIONS.slice();
-  } else {
-    activeQuestions = QUESTIONS.filter(q => q.cat === mode);
-  }
+  let filtered = (mode === 'all') ? QUESTIONS.slice() : QUESTIONS.filter(q => q.cat === mode);
+  
+  // Áp dụng xáo trộn ngẫu nhiên đáp án tại đây
+  activeQuestions = prepareQuestions(filtered);
+  
   answeredCount = 0;
   correctCount = 0;
   document.getElementById('introPanel').style.display = 'none';
   document.getElementById('resultPanel').style.display = 'none';
   document.getElementById('quizPanel').style.display = 'block';
+  
   renderQuestions();
   updateProgress();
   window.scrollTo({top:0, behavior:'smooth'});
@@ -577,6 +633,11 @@ function backToIntro(){
 function renderQuestions(){
   const list = document.getElementById('questionList');
   list.innerHTML = '';
+  
+  // Sử dụng DocumentFragment để tối ưu hiệu năng render
+  const fragment = document.createDocumentFragment();
+  const letters = ['A','B','C','D'];
+
   activeQuestions.forEach((q, idx) => {
     const card = document.createElement('div');
     card.className = 'question-card';
@@ -590,16 +651,16 @@ function renderQuestions(){
 
     const qText = document.createElement('div');
     qText.className = 'q-text';
-    qText.innerHTML = q.q;
+    qText.innerHTML = formatMath(q.q); // Áp dụng định dạng MathJax
     card.appendChild(qText);
 
     const opts = document.createElement('div');
     opts.className = 'options';
-    const letters = ['A','B','C','D'];
+    
     q.opts.forEach((optText, oi) => {
       const btn = document.createElement('button');
       btn.className = 'option';
-      btn.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      btn.innerHTML = `<span class="letter">${letters[oi]}</span><span>${formatMath(optText)}</span>`;
       btn.onclick = () => selectAnswer(idx, oi, btn);
       opts.appendChild(btn);
     });
@@ -610,9 +671,15 @@ function renderQuestions(){
     explainBox.id = 'explain-'+idx;
     card.appendChild(explainBox);
 
-    list.appendChild(card);
+    fragment.appendChild(card);
   });
-  if(window.MathJax){ MathJax.typesetPromise && MathJax.typesetPromise(); }
+  
+  list.appendChild(fragment);
+  
+  // Kích hoạt MathJax render lại các công thức mới được thêm vào DOM
+  if(window.MathJax){ 
+    MathJax.typesetPromise && MathJax.typesetPromise(); 
+  }
 }
 
 function selectAnswer(qIdx, optIdx, btnEl){
@@ -620,7 +687,7 @@ function selectAnswer(qIdx, optIdx, btnEl){
   const card = document.getElementById('qcard-'+qIdx);
   const optionButtons = card.querySelectorAll('.option');
 
-  // nếu đã trả lời rồi thì không cho chọn lại
+  // Nếu đã trả lời rồi thì không cho chọn lại
   if(card.dataset.answered === '1') return;
   card.dataset.answered = '1';
 
@@ -642,12 +709,21 @@ function selectAnswer(qIdx, optIdx, btnEl){
   if(isCorrect) correctCount++;
 
   const explainBox = document.getElementById('explain-'+qIdx);
+  const correctLetter = ['A','B','C','D'][q.ans];
+  
   explainBox.innerHTML = `
-    <div class="explain-title">${isCorrect ? '🎉 Chính xác! Đáp án đúng là: ' : '❌ Chưa đúng. Đáp án đúng là: '}${['A','B','C','D'][q.ans]}. ${q.opts[q.ans]}</div>
-    <div class="explain-text">📖 <b>Giải thích:</b> ${q.explain}</div>
-    <div class="tip-box">💡 <b>Mẹo làm nhanh:</b> ${q.tip}</div>
+    <div class="explain-title">
+      ${isCorrect ? '🎉 Chính xác!' : '❌ Chưa đúng.'} Đáp án đúng là: <strong>${correctLetter}</strong>
+    </div>
+    <div class="explain-text">📖 <b>Giải thích:</b> ${formatMath(q.explain)}</div>
+    <div class="tip-box">💡 <b>Mẹo làm nhanh:</b> ${formatMath(q.tip)}</div>
   `;
   explainBox.classList.add('show');
+
+  // Render MathJax cho phần giải thích vừa được thêm vào
+  if(window.MathJax){ 
+    MathJax.typesetPromise([explainBox]); 
+  }
 
   updateProgress();
 }
@@ -664,8 +740,10 @@ function showResult(){
   document.getElementById('resultPanel').style.display = 'block';
   const total = activeQuestions.length;
   document.getElementById('resultScore').textContent = `${correctCount}/${total}`;
+  
   let msg = '';
   const pct = total ? (correctCount/total*100) : 0;
+  
   if(answeredCount < total){
     msg = `Bạn mới trả lời ${answeredCount}/${total} câu. Hãy hoàn thành hết để biết kết quả chính xác nhé! 🌸`;
   } else if(pct >= 90){
